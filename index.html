@@ -65,12 +65,30 @@ h1.mega .hl{background:var(--cheese);padding:0 14px;border:3px solid var(--ink);
 .sec-t em{font-style:italic;color:var(--pasture-d)}
 .sec-d{color:#6d5236;font-size:15.5px;max-width:60ch}
 /* toolbar */
-.tools{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0 20px;align-items:center}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0 6px;align-items:center;position:sticky;top:70px;z-index:40;background:rgba(255,248,234,.92);backdrop-filter:blur(10px);padding:10px 12px;border-radius:18px;border:1px solid rgba(43,26,14,.12)}
 .search{flex:1;min-width:220px;display:flex;align-items:center;gap:10px;background:var(--paper);border:2px solid var(--ink);border-radius:100px;padding:11px 20px;box-shadow:3px 3px 0 var(--ink)}
 .search input{flex:1;border:none;outline:none;background:none;font-size:14.5px;color:var(--ink)}
 .pills{display:flex;gap:8px;flex-wrap:wrap}
 .pills button{border:2px solid var(--ink);background:var(--paper);border-radius:100px;padding:9px 17px;font-weight:700;font-size:13px;box-shadow:2px 2px 0 var(--ink)}
 .pills button.on{background:var(--pasture);color:#fff;border-color:var(--ink)}
+/* spotlight oferta */
+.spot{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:center;margin:18px 0 4px;border-radius:24px;padding:22px;color:#fff;background:radial-gradient(circle at 90% 10%,rgba(255,196,46,.35),transparent 50%),linear-gradient(120deg,#8f2a12,#C73E1D 60%,#5B3A1E);box-shadow:0 18px 44px rgba(199,62,29,.35);overflow:hidden;position:relative}
+.spot::after{content:"🧀";position:absolute;right:14px;bottom:-14px;font-size:88px;opacity:.18}
+.spot-ph{width:150px;height:150px;border-radius:18px;background:linear-gradient(135deg,#FFE9B8,#FFC42E);display:grid;place-items:center;font-size:76px;overflow:hidden;position:relative}
+.spot-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.spot-k{display:inline-block;background:var(--cheese);color:var(--ink);font-weight:800;font-size:11px;letter-spacing:.12em;border-radius:100px;padding:6px 14px}
+.spot h3{font-family:var(--disp);font-size:clamp(22px,3vw,32px);font-weight:900;margin:8px 0 4px}
+.spot p{font-size:13.5px;opacity:.9;line-height:1.55;max-width:52ch}
+.spot-price{display:flex;align-items:baseline;gap:10px;margin:10px 0 14px}
+.spot-price b{font-size:32px;font-weight:800}
+.spot-price s{opacity:.65;font-size:16px}
+.spot-price .off{background:#fff;color:var(--barn);font-weight:800;font-size:12px;border-radius:100px;padding:5px 12px}
+.spot .addbtn{background:var(--cheese);color:var(--ink);max-width:260px}
+.spot .addbtn:hover{background:#fff}
+/* skeleton */
+.skel{height:340px;border-radius:24px;background:linear-gradient(100deg,#F1E7D2 40%,#FBF5E6 50%,#F1E7D2 60%);background-size:200% 100%;animation:shim 1.2s infinite}
+@keyframes shim{to{background-position:-200% 0}}
+@media(max-width:560px){.spot{grid-template-columns:1fr}.spot-ph{width:100%;height:150px}}
 /* products (moderno) */
 .shopbar{display:flex;gap:10px;align-items:center;margin:20px 0 4px;flex-wrap:wrap}
 .countline{font-size:13px;font-weight:700;color:#6d5236}
@@ -289,6 +307,7 @@ footer{background:var(--ink);color:var(--cream);margin-top:0}
         <option value="desc">💲 Mayor precio</option>
       </select>
     </div>
+    <div id="spot"></div>
     <div class="grid" id="grid"></div>
 
     <div class="band">
@@ -378,15 +397,20 @@ function qtyLabel(cant, unidad){ return unidad === "kg" ? (cant + " kg") : (cant
 var SUPABASE_URL = "https://tyqyuhunxchosijzpbpn.supabase.co";
 var SUPABASE_KEY = "sb_publishable_FnJWCS_lYxL51sYhfdEX3Q_UIY8l3LK";
 var cloud = !!(SUPABASE_URL && SUPABASE_KEY);
+var nubeLista = false;
 function sbH(json){ var h = { apikey: SUPABASE_KEY, Authorization: "Bearer " + SUPABASE_KEY }; if(json){ h["Content-Type"] = "application/json"; h.Prefer = "resolution=merge-duplicates"; } return h; }
 function rowOf(p){ return { id: p.id, nombre: p.nombre, descripcion: p.desc || "", precio: p.precio, unidad: p.unidad, categoria: p.cat || "Frescos", oferta: p.oferta || 0, foto: p.foto || "", emoji: p.emoji || "🧀", nuevo: !!p.nuevo, stock: p.stock ? 1 : 0, fecha: p.fecha || "", updated_at: new Date().toISOString() }; }
 function cloudCargar(silencioso){
   if(!cloud) return Promise.resolve();
+  if(!nubeLista && !products.length){
+    var g0 = document.getElementById("grid");
+    if(g0) g0.innerHTML = '<div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div>';
+  }
   return fetch(SUPABASE_URL + "/rest/v1/productos?select=*&order=updated_at.desc", { headers: sbH(false) }).then(function(r){ if(!r.ok) throw new Error("nube"); return r.json(); }).then(function(rows){
     products = (rows || []).map(function(w){ return { id: w.id, nombre: w.nombre, desc: w.descripcion || "", precio: w.precio, unidad: w.unidad, cat: w.categoria || "Frescos", oferta: w.oferta || 0, foto: w.foto || "", emoji: w.emoji || "🧀", nuevo: !!w.nuevo, stock: w.stock, fecha: w.fecha || "" }; });
-    savP(); renderShop(); renderCart();
+    savP(); renderShop(); renderCart(); nubeLista = true;
     if(!silencioso) toast("☁️ Vitrina sincronizada con la nube.");
-  }).catch(function(){ if(!silencioso) toast("📴 Sin nube: mostrando copia local."); });
+  }).catch(function(){ nubeLista = true; if(!silencioso) toast("📴 Sin nube: mostrando copia local."); });
 }
 function cloudGuardar(p){ if(!cloud) return Promise.resolve(); return fetch(SUPABASE_URL + "/rest/v1/productos", { method: "POST", headers: sbH(true), body: JSON.stringify(rowOf(p)) }); }
 function cloudBorrar(id){ if(!cloud) return Promise.resolve(); return fetch(SUPABASE_URL + "/rest/v1/productos?id=eq." + encodeURIComponent(id), { method: "DELETE", headers: sbH(false) }); }
@@ -396,8 +420,10 @@ function cats(){ var s = {}; CATS_DEFAULT.forEach(function(c){ s[c] = 1; }); pro
 function setCat(c){ filtroCat = c; renderShop(); }
 function renderShop(){
   var q = document.getElementById("q").value.toLowerCase().trim();
-  document.getElementById("catPills").innerHTML = cats().map(function(c){
-    return '<button class="' + (c === filtroCat ? "on" : "") + '" onclick="setCat(\'' + esc(c) + '\')">' + esc(c) + "</button>";
+  var names = cats();
+  document.getElementById("catPills").innerHTML = names.map(function(c){
+    var n = c === "Todos" ? products.length : products.filter(function(p){ return p.cat === c; }).length;
+    return '<button class="' + (c === filtroCat ? "on" : "") + '" onclick="setCat(\'' + esc(c) + '\')">' + esc(c) + " · " + n + "</button>";
   }).join("");
   var list = products.slice();
   if(filtroCat !== "Todos") list = list.filter(function(p){ return p.cat === filtroCat; });
@@ -405,6 +431,13 @@ function renderShop(){
   if(orden === "asc") list.sort(function(a, b){ return finalPrice(a) - finalPrice(b); });
   if(orden === "desc") list.sort(function(a, b){ return finalPrice(b) - finalPrice(a); });
   document.getElementById("countLine").textContent = list.length + (list.length === 1 ? " queso" : " quesos") + " en vitrina";
+  var spot = products.filter(function(p){ return p.oferta > 0 && p.stock > 0; }).sort(function(a, b){ return b.oferta - a.oferta; })[0];
+  var sp = document.getElementById("spot");
+  if(spot){
+    var fp = finalPrice(spot);
+    var foto = spot.foto ? '<img src="' + esc(spot.foto) + '" alt="' + esc(spot.nombre) + '" loading="lazy" onerror="this.remove()">' : esc(spot.emoji || "🧀");
+    sp.innerHTML = '<div class="spot"><div class="spot-ph">' + foto + '</div><div><span class="spot-k">🔥 OFERTA DE LA SEMANA · -' + spot.oferta + '%</span><h3>' + esc(spot.nombre) + '</h3><p>' + esc((spot.desc || "").slice(0, 110)) + '</p><div class="spot-price"><b>' + money(fp) + '</b><s>' + money(spot.precio) + '</s><span class="off">AHORRAS ' + money(spot.precio - fp) + '</span></div><button class="addbtn" onclick="addCart(\'' + spot.id + '\')">Añadir 🧺</button></div></div>';
+  } else sp.innerHTML = "";
   var g = document.getElementById("grid");
   if(!list.length){
     g.innerHTML = '<div class="empty"><div class="big">🧀</div><h3>' + (products.length ? "No encontramos ese queso" : "Vitrina en preparación") + '</h3><p>' + (products.length ? "Prueba con otra búsqueda o categoría." : "El dueño pronto publicará los quesos frescos aquí. Mientras tanto, pregúntanos por WhatsApp. 👇") + "</p></div>";
