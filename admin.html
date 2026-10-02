@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QUESERA JYM 🔐 — Panel del dueño</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='2' y='2' width='60' height='60' rx='18' fill='%231B5E20'/%3E%3Crect x='17' y='12' width='30' height='36' rx='13' fill='white'/%3E%3Ccircle cx='26' cy='29' r='3' fill='%232B1A0E'/%3E%3Ccircle cx='38' cy='29' r='3' fill='%232B1A0E'/%3E%3Cellipse cx='32' cy='40' rx='9' ry='7' fill='%23F6C9D4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FFF8EA;--paper:#FFFBF2;--ink:#2B1A0E;--brown:#5B3A1E;--cheese:#FFC42E;--barn:#C73E1D;--pasture:#2E7D32;--disp:'Fraunces',Georgia,serif;--body:'Inter',system-ui,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);background:var(--cream);color:var(--ink)}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit}
+header{background:var(--ink);color:var(--cream);padding:14px 20px;display:flex;align-items:center;gap:12px}
+header b{font-family:var(--disp);font-size:20px}
+header a{margin-left:auto;color:var(--cheese);font-weight:700;font-size:13.5px;text-decoration:none;border:2px solid var(--cheese);border-radius:100px;padding:8px 18px}
+.adminbox{max-width:1060px;margin:0 auto;padding:36px 20px 60px}
+.panel{background:var(--paper);border:2.5px solid var(--ink);border-radius:22px;box-shadow:7px 7px 0 var(--ink);padding:28px}
+.panel h2{font-family:var(--disp);font-size:28px;font-weight:900}
+.sec-k{font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--barn);text-transform:uppercase}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:18px}
+.fgrid .full{grid-column:1/-1}
+.fld label{display:block;font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--brown);margin-bottom:6px}
+.fld input,.fld select,.fld textarea{width:100%;border:2px solid var(--ink);border-radius:12px;padding:11px 14px;font-size:14px;background:#fff;color:var(--ink);outline:none}
+.fld textarea{min-height:74px;resize:vertical}
+.emojis{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.emojis button{font-size:26px;border:2px solid var(--ink);border-radius:12px;background:#fff;width:52px;height:52px}
+.emojis button.on{background:var(--cheese)}
+.arow{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.abtn{border:2px solid var(--ink);border-radius:100px;padding:13px 28px;font-weight:800;font-size:15px;box-shadow:3px 3px 0 var(--ink)}
+.abtn.save{background:var(--pasture);color:#fff}
+.abtn.clear{background:#fff}
+.alist{margin-top:22px;display:flex;flex-direction:column;gap:12px}
+.arowline{display:flex;align-items:center;gap:14px;border:2px solid var(--ink);border-radius:14px;padding:12px 16px;background:#fff}
+.arowline .pe{font-size:38px}
+.arowline b{font-size:15px;display:block}
+.arowline small{color:#6d5236;font-size:12.5px}
+.arowline .ops{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.mini{border:2px solid var(--ink);background:var(--paper);border-radius:100px;padding:8px 16px;font-weight:800;font-size:12.5px}
+.mini:hover{background:var(--cheese)}
+.mini.danger:hover{background:var(--barn);color:#fff}
+.pinwrap{max-width:420px;margin:60px auto;text-align:center}
+.pinwrap .lock{font-size:64px}
+.pinwrap input{width:100%;border:3px solid var(--ink);border-radius:16px;padding:15px;font-size:22px;text-align:center;letter-spacing:.4em;margin:16px 0;outline:none}
+.astats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:20px}
+.astat{background:var(--ink);color:var(--cheese);border-radius:14px;padding:16px;text-align:center}
+.astat b{font-size:26px;display:block}
+.astat span{font-size:11px;letter-spacing:.12em;font-weight:700;opacity:.8}
+.empty{text-align:center;border:3px dashed var(--ink);border-radius:20px;padding:50px 20px;background:#fff}
+.empty .big{font-size:56px}
+.upzone{border:3px dashed var(--ink);border-radius:14px;background:#fff;padding:24px 16px;text-align:center;cursor:pointer;transition:background .15s}
+.upzone:hover,.upzone.dragover{background:#FFF3D6}
+.upzone .uze{font-size:44px;display:block}
+.upzone b{font-size:16px;display:block;margin-top:6px}
+.upzone small{color:#6d5236;font-size:12.5px;display:block;margin-top:4px}
+.upzone img{max-width:100%;max-height:220px;border:2px solid var(--ink);border-radius:12px;margin-top:12px}
+#fileInfo{font-size:12.5px;font-weight:700;color:var(--pasture);display:block;margin-top:6px}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(90px);background:var(--ink);color:var(--cheese);font-weight:700;padding:14px 28px;border-radius:100px;z-index:200;transition:transform .35s;font-size:14px;border:2px solid var(--cheese);max-width:90vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media(max-width:640px){.fgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><svg viewBox="0 0 64 64" width="34" height="34"><defs><linearGradient id="lgA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3CB45F"/><stop offset="1" stop-color="#1B5E20"/></linearGradient></defs><rect x="3" y="3" width="58" height="58" rx="19" fill="url(#lgA)" stroke="#2B1A0E" stroke-width="3"/><path d="M20 13 L14 5 L25 9 Z" fill="#FFE9B8" stroke="#2B1A0E" stroke-width="2.5" stroke-linejoin="round"/><path d="M44 13 L50 5 L39 9 Z" fill="#FFE9B8" stroke="#2B1A0E" stroke-width="2.5" stroke-linejoin="round"/><ellipse cx="14" cy="26" rx="7" ry="5" fill="#fff" stroke="#2B1A0E" stroke-width="2.5" transform="rotate(-20 14 26)"/><ellipse cx="50" cy="26" rx="7" ry="5" fill="#fff" stroke="#2B1A0E" stroke-width="2.5" transform="rotate(20 50 26)"/><rect x="17" y="12" width="30" height="36" rx="13" fill="#fff" stroke="#2B1A0E" stroke-width="3"/><ellipse cx="39" cy="20" rx="6" ry="5" fill="#2B1A0E"/><circle cx="26" cy="29" r="2.8" fill="#2B1A0E"/><circle cx="38" cy="29" r="2.8" fill="#2B1A0E"/><ellipse cx="32" cy="40" rx="9.5" ry="7" fill="#F6C9D4" stroke="#2B1A0E" stroke-width="2.5"/><circle cx="28.5" cy="40" r="1.6" fill="#2B1A0E"/><circle cx="35.5" cy="40" r="1.6" fill="#2B1A0E"/></svg><b>QUESERA JYM · Panel del dueño</b><a href="index.html">🏪 Ver tienda →</a></header>
+
+<div class="adminbox">
+  <div id="pinGate">
+    <div class="panel pinwrap">
+      <span class="lock">🔐</span>
+      <h2>Solo el dueño</h2>
+      <p style="color:#6d5236;margin-top:6px">Ingresa tu PIN. (PIN inicial: <b>1234</b> — cámbialo abajo al entrar)</p>
+      <input id="pinIn" type="password" inputmode="numeric" maxlength="8" placeholder="••••" onkeydown="if(event.key==='Enter')unlock()">
+      <button class="abtn save" style="width:100%" onclick="unlock()">Entrar →</button>
+    </div>
+  </div>
+
+  <div id="adminPanel" style="display:none">
+    <div class="panel" style="margin-bottom:20px">
+      <h2>Conexión nube <span id="cloudBadge" style="font-size:15px;font-family:var(--body)"></span></h2>
+      <p id="cloudDesc" style="color:#6d5236;font-size:13.5px;margin-top:6px"></p>
+      <div class="arow"><button class="abtn save" onclick="subirTodo()">☁️ Subir todo a la nube</button></div>
+    </div>
+    <div class="panel">
+      <span class="sec-k">📦 Productos de la tienda</span>
+      <h2 id="formTitle">Publicar producto</h2>
+      <div class="fgrid">
+        <div class="fld full"><label>Nombre del producto *</label><input id="pNombre" maxlength="60" placeholder="ej. Queso Campesino Fresco"></div>
+        <div class="fld full"><label>Descripción</label><textarea id="pDesc" maxlength="220" placeholder="ej. Fresco del día, blandito y de sabor suave."></textarea></div>
+        <div class="fld"><label>Precio * (por kilo o por unidad)</label><input id="pPrecio" type="number" min="0" step="500" placeholder="ej. 24000"></div>
+        <div class="fld"><label>Se vende por *</label><select id="pUnidad"><option value="kg">Por kilo (kg)</option><option value="unidad">Por unidad</option></select></div>
+        <div class="fld"><label>Categoría (tú la creas)</label><input id="pCat" list="catList" maxlength="24" placeholder="ej. Frescos"><datalist id="catList"><option>Frescos</option><option>Untables</option></datalist></div>
+        <div class="fld"><label>Descuento % (0 = sin oferta)</label><input id="pOferta" type="number" min="0" max="90" value="0"></div>
+        <div class="fld full"><label>Foto del producto (desde tu celular o computador)</label>
+          <div class="upzone" id="upzone" onclick="document.getElementById('pFile').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="dropFoto(event)">
+            <span class="uze">📷</span>
+            <b>Toca aquí para subir la foto</b>
+            <small>Se abre tu galería, cámara o archivos · la foto se comprime sola</small>
+            <img id="pPreview" alt="Vista previa">
+          </div>
+          <input type="file" id="pFile" accept="image/*" style="display:none" onchange="handleFile(this)">
+          <small id="fileInfo"></small>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <input id="pFoto" placeholder="…o pega un link https:// (opcional)" style="flex:1">
+            <button class="mini" onclick="clearFoto()">Quitar</button>
+          </div>
+        </div>
+        <div class="fld"><label>¿Es novedad?</label><select id="pNuevo"><option value="0">No</option><option value="1">Sí, insignia NUEVO</option></select></div>
+        <div class="fld full"><label>Dibujo del producto</label><div class="emojis" id="emojiPick"></div></div>
+      </div>
+      <div class="arow">
+        <button class="abtn save" onclick="saveProduct()">✅ Publicar producto</button>
+        <button class="abtn clear" onclick="clearForm()">Limpiar</button>
+      </div>
+      <div class="astats" id="astats"></div>
+    </div>
+
+    <div class="panel" style="margin-top:20px">
+      <h2>Mis productos publicados</h2>
+      <div class="alist" id="alist"></div>
+    </div>
+
+    <div class="panel" style="margin-top:20px">
+      <h2>Cambiar PIN</h2>
+      <div class="fgrid">
+        <div class="fld"><label>Nuevo PIN</label><input id="pinNew" type="password" maxlength="8" placeholder="••••"></div>
+        <div class="fld"><label>&nbsp;</label><button class="abtn save" style="width:100%" onclick="changePin()">Guardar PIN</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var K_PRODUCTS = "qj_products_v1", K_PIN = "qj_pin_v1";
+var EMOJIS = ["🧀","🐄","🥛","🫕","🍕","🥪","🫓","🧈","🐐","🌿"];
+var products = [], editId = null, adminOK = false, pickEmoji = "🧀", pickFotoData = "";
+try{ products = JSON.parse(localStorage.getItem(K_PRODUCTS) || "[]"); }catch(e){ products = []; }
+function savP(){ try{ localStorage.setItem(K_PRODUCTS, JSON.stringify(products)); }catch(e){} }
+function getPin(){ return localStorage.getItem(K_PIN) || "1234"; }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(m){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]; }); }
+function money(n){ return "$ " + Math.round(n).toLocaleString("es-CO"); }
+function toast(m){ var t = document.getElementById("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(function(){ t.classList.remove("show"); }, 2600); }
+function finalPrice(p){ return p.precio * (1 - (p.oferta || 0) / 100); }
+function prodById(id){ return products.find(function(p){ return p.id === id; }); }
+
+/* ================= NUBE (Supabase, opcional) ================= */
+var SUPABASE_URL = "";
+var SUPABASE_KEY = "";
+var cloud = !!(SUPABASE_URL && SUPABASE_KEY);
+function sbH(json){ var h = { apikey: SUPABASE_KEY, Authorization: "Bearer " + SUPABASE_KEY }; if(json){ h["Content-Type"] = "application/json"; h.Prefer = "resolution=merge-duplicates"; } return h; }
+function rowOf(p){ return { id: p.id, nombre: p.nombre, descripcion: p.desc || "", precio: p.precio, unidad: p.unidad, categoria: p.cat || "Frescos", oferta: p.oferta || 0, foto: p.foto || "", emoji: p.emoji || "🧀", nuevo: !!p.nuevo, stock: p.stock ? 1 : 0, fecha: p.fecha || "", updated_at: new Date().toISOString() }; }
+function adminNube(silencioso){
+  if(!cloud) return Promise.resolve();
+  return fetch(SUPABASE_URL + "/rest/v1/productos?select=*&order=updated_at.desc", { headers: sbH(false) }).then(function(r){ if(!r.ok) throw new Error("nube"); return r.json(); }).then(function(rows){
+    products = (rows || []).map(function(w){ return { id: w.id, nombre: w.nombre, desc: w.descripcion || "", precio: w.precio, unidad: w.unidad, cat: w.categoria || "Frescos", oferta: w.oferta || 0, foto: w.foto || "", emoji: w.emoji || "🧀", nuevo: !!w.nuevo, stock: w.stock, fecha: w.fecha || "" }; });
+    savP(); if(adminOK) renderAdmin();
+    if(!silencioso) toast("☁️ Sincronizado con la nube.");
+  }).catch(function(){ if(!silencioso) toast("📴 Sin nube: trabajando en local."); });
+}
+function cloudGuardar(p){ if(!cloud) return Promise.resolve(); return fetch(SUPABASE_URL + "/rest/v1/productos", { method: "POST", headers: sbH(true), body: JSON.stringify(rowOf(p)) }); }
+function cloudBorrar(id){ if(!cloud) return Promise.resolve(); return fetch(SUPABASE_URL + "/rest/v1/productos?id=eq." + encodeURIComponent(id), { method: "DELETE", headers: sbH(false) }); }
+function subirTodo(){
+  if(!cloud){ toast("📴 Activa la nube primero (pon las claves en el código)."); return; }
+  if(!products.length){ toast("No hay productos para subir."); return; }
+  Promise.all(products.map(cloudGuardar)).then(function(){ toast("☁️ " + products.length + " productos en la nube. Ya los ve todo el mundo."); }).catch(function(){ toast("❌ Falló la subida. Revisa las claves."); });
+}
+
+function unlock(){
+  if(document.getElementById("pinIn").value === getPin()){
+    adminOK = true;
+    document.getElementById("pinGate").style.display = "none";
+    document.getElementById("adminPanel").style.display = "";
+    document.getElementById("cloudBadge").textContent = cloud ? "☁️ nube activada" : "📴 modo local";
+    document.getElementById("cloudDesc").textContent = cloud ? "Lo que publiques aquí lo ve todo el mundo automáticamente." : "Solo este aparato. Pide las claves Supabase para activar la nube.";
+    renderAdmin(); if(cloud) adminNube(true); toast("✅ Bienvenido, dueño.");
+  } else toast("❌ PIN incorrecto.");
+}
+function renderAdmin(){
+  if(!adminOK) return;
+  document.getElementById("emojiPick").innerHTML = EMOJIS.map(function(e){
+    return '<button class="' + (e === pickEmoji ? "on" : "") + '" onclick="pickE(\'' + e + '\')">' + e + "</button>";
+  }).join("");
+  var val = products.reduce(function(a, p){ return a + (p.precio || 0) * (p.stock || 0); }, 0);
+  document.getElementById("astats").innerHTML =
+    '<div class="astat"><b>' + products.length + "</b><span>PRODUCTOS</span></div>" +
+    '<div class="astat"><b>' + products.filter(function(p){ return p.oferta > 0; }).length + "</b><span>OFERTAS</span></div>" +
+    '<div class="astat"><b>' + money(val) + "</b><span>VALOR VITRINA</span></div>";
+  var l = document.getElementById("alist");
+  if(!products.length){ l.innerHTML = '<div class="empty"><div class="big">📦</div><h3>Sin productos</h3><p>Publica tu primer queso arriba. La tienda muestra “Vitrina en preparación” hasta entonces.</p></div>'; return; }
+  l.innerHTML = products.map(function(p){
+    return '<div class="arowline"><span class="pe">' + (p.foto ? "🖼️" : esc(p.emoji || "🧀")) + "</span>" +
+      "<div><b>" + esc(p.nombre) + "</b><small>" + money(finalPrice(p)) + " / " + (p.unidad === "kg" ? "kg" : "und") + " · " + esc(p.cat || "-") + (p.oferta > 0 ? " · -" + p.oferta + "%" : "") + (!(p.stock > 0) ? " · ⛔ agotado" : "") + "</small></div>" +
+      '<div class="ops"><button class="mini" onclick="editProduct(\'' + p.id + "')\">Editar</button>" +
+      '<button class="mini" onclick="toggleStock(\'' + p.id + "')\">" + (!(p.stock > 0) ? "Hay stock" : "Agotar") + "</button>" +
+      '<button class="mini danger" onclick="delProduct(\'' + p.id + "')\">Borrar</button></div></div>";
+  }).join("");
+}
+function pickE(e){ pickEmoji = e; renderAdmin(); }
+function handleFile(inp){
+  var f = inp.files && inp.files[0]; if(f) processFile(f);
+}
+function dropFoto(ev){
+  ev.preventDefault();
+  var z = document.getElementById("upzone"); if(z) z.classList.remove("dragover");
+  var f = ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files[0];
+  if(f) processFile(f);
+}
+function processFile(f){
+  if(!/^image\//.test(f.type || "")){ toast("❌ Eso no es una imagen."); return; }
+  var rd = new FileReader();
+  rd.onload = function(){
+    var img = new Image();
+    img.onload = function(){
+      var max = 900, sc = Math.min(1, max / Math.max(img.width || 1, img.height || 1));
+      var w = Math.max(1, Math.round(img.width * sc)), h = Math.max(1, Math.round(img.height * sc));
+      var cv = document.createElement("canvas"); cv.width = w; cv.height = h;
+      cv.getContext("2d").drawImage(img, 0, 0, w, h);
+      var url = "";
+      try{ url = cv.toDataURL("image/jpeg", 0.82); }catch(e){ toast("❌ No se pudo procesar la imagen."); return; }
+      if(url.length > 1500000){ toast("❌ Foto muy pesada aun comprimida. Prueba otra."); return; }
+      pickFotoData = url;
+      document.getElementById("pFoto").value = "";
+      var pv = document.getElementById("pPreview"); pv.src = url; pv.style.display = "block";
+      document.getElementById("fileInfo").textContent = "✅ " + (f.name || "foto") + " · " + Math.round(url.length / 1024) + " KB · lista para publicar";
+      toast("📷 Foto lista para publicar.");
+    };
+    img.onerror = function(){ toast("❌ No se pudo leer la imagen."); };
+    img.src = rd.result;
+  };
+  rd.onerror = function(){ toast("❌ No se pudo leer el archivo."); };
+  rd.readAsDataURL(f);
+}
+function clearFoto(){
+  pickFotoData = "";
+  document.getElementById("pFoto").value = "";
+  document.getElementById("pFile").value = "";
+  document.getElementById("pPreview").style.display = "none";
+  document.getElementById("fileInfo").textContent = "";
+}
+function clearForm(){
+  editId = null; pickEmoji = "🧀"; clearFoto();
+  ["pNombre","pDesc","pPrecio","pCat","pFoto"].forEach(function(id){ document.getElementById(id).value = ""; });
+  document.getElementById("pUnidad").value = "kg"; document.getElementById("pOferta").value = 0; document.getElementById("pNuevo").value = "0";
+  document.getElementById("formTitle").textContent = "Publicar producto";
+  renderAdmin();
+}
+function saveProduct(){
+  var nombre = document.getElementById("pNombre").value.trim();
+  var precio = parseFloat(document.getElementById("pPrecio").value);
+  if(nombre.length < 3){ toast("Ponle un nombre al producto (3+ letras)."); return; }
+  if(!(precio > 0)){ toast("Ponle un precio válido mayor a 0."); return; }
+  var data = {
+    nombre: nombre, desc: document.getElementById("pDesc").value.trim(),
+    precio: Math.round(precio), unidad: document.getElementById("pUnidad").value,
+    cat: document.getElementById("pCat").value.trim() || "Frescos",
+    oferta: Math.min(90, Math.max(0, parseInt(document.getElementById("pOferta").value) || 0)),
+    foto: pickFotoData || document.getElementById("pFoto").value.trim(),
+    emoji: pickEmoji, nuevo: document.getElementById("pNuevo").value === "1", stock: 1
+  };
+  if(editId){
+    var p = prodById(editId);
+    if(p){ Object.keys(data).forEach(function(k){ p[k] = data[k]; }); if(cloud) cloudGuardar(p).catch(function(){ toast("❌ No se guardó en la nube."); }); toast("✅ Producto actualizado."); }
+    editId = null; document.getElementById("formTitle").textContent = "Publicar producto";
+  } else { data.id = "q" + Date.now(); data.fecha = "recién"; products.unshift(data); if(cloud) cloudGuardar(data).catch(function(){ toast("❌ No se guardó en la nube."); }); toast("✅ Producto publicado en la tienda."); }
+  savP(); clearForm();
+}
+function editProduct(id){
+  var p = prodById(id); if(!p) return;
+  editId = id; pickEmoji = p.emoji || "🧀";
+  document.getElementById("pNombre").value = p.nombre;
+  document.getElementById("pDesc").value = p.desc || "";
+  document.getElementById("pPrecio").value = p.precio;
+  document.getElementById("pUnidad").value = p.unidad;
+  document.getElementById("pCat").value = p.cat || "";
+  document.getElementById("pOferta").value = p.oferta || 0;
+  document.getElementById("pFoto").value = p.foto && p.foto.indexOf("data:") !== 0 ? p.foto : "";
+  pickFotoData = p.foto && p.foto.indexOf("data:") === 0 ? p.foto : "";
+  var pv0 = document.getElementById("pPreview");
+  if(pickFotoData){ pv0.src = pickFotoData; pv0.style.display = "block"; document.getElementById("fileInfo").textContent = "✅ Foto guardada anteriormente"; }
+  else { pv0.style.display = "none"; document.getElementById("fileInfo").textContent = ""; }
+  document.getElementById("pFile").value = "";
+  document.getElementById("pNuevo").value = p.nuevo ? "1" : "0";
+  document.getElementById("formTitle").textContent = "Editar: " + p.nombre;
+  renderAdmin(); window.scrollTo(0, 0);
+}
+function delProduct(id){
+  var p = prodById(id);
+  if(!p || !confirm("¿Borrar '" + p.nombre + "' de la tienda?")) return;
+  products = products.filter(function(x){ return x.id !== id; });
+  if(cloud) cloudBorrar(id).catch(function(){ toast("❌ No se borró en la nube."); });
+  savP(); renderAdmin(); toast("🗑 Producto borrado.");
+}
+function toggleStock(id){
+  var p = prodById(id); if(!p) return;
+  p.stock = (p.stock > 0) ? 0 : 1;
+  if(cloud) cloudGuardar(p).catch(function(){ toast("❌ No se guardó en la nube."); });
+  savP(); renderAdmin(); toast(p.stock > 0 ? "✅ Marcado con stock." : "⛔ Marcado como agotado.");
+}
+function changePin(){
+  var v = document.getElementById("pinNew").value.trim();
+  if(v.length < 4){ toast("El PIN debe tener 4+ dígitos."); return; }
+  try{ localStorage.setItem(K_PIN, v); }catch(e){}
+  document.getElementById("pinNew").value = "";
+  toast("🔐 PIN actualizado.");
+}
+/* Si hay otro admin abierto en otra pestaña, este también se actualiza solo */
+window.addEventListener("storage", function(e){
+  if(e && e.key === K_PRODUCTS){
+    try{ products = JSON.parse(e.newValue || "[]"); }catch(x){ products = []; }
+    if(adminOK) renderAdmin();
+  }
+});
+</script>
+</body>
+</html>
