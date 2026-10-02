@@ -375,8 +375,8 @@ function prodById(id){ return products.find(function(p){ return p.id === id; });
 function qtyLabel(cant, unidad){ return unidad === "kg" ? (cant + " kg") : (cant + " und"); }
 
 /* ================= NUBE (Supabase, opcional) ================= */
-var SUPABASE_URL = "";
-var SUPABASE_KEY = "";
+var SUPABASE_URL = "https://tyqyuhunxchosijzpbpn.supabase.co";
+var SUPABASE_KEY = "sb_publishable_FnJWCS_lYxL51sYhfdEX3Q_UIY8l3LK";
 var cloud = !!(SUPABASE_URL && SUPABASE_KEY);
 function sbH(json){ var h = { apikey: SUPABASE_KEY, Authorization: "Bearer " + SUPABASE_KEY }; if(json){ h["Content-Type"] = "application/json"; h.Prefer = "resolution=merge-duplicates"; } return h; }
 function rowOf(p){ return { id: p.id, nombre: p.nombre, descripcion: p.desc || "", precio: p.precio, unidad: p.unidad, categoria: p.cat || "Frescos", oferta: p.oferta || 0, foto: p.foto || "", emoji: p.emoji || "🧀", nuevo: !!p.nuevo, stock: p.stock ? 1 : 0, fecha: p.fecha || "", updated_at: new Date().toISOString() }; }
