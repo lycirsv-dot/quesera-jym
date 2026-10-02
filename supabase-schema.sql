@@ -21,6 +21,8 @@ create table if not exists productos (
 
 alter table productos enable row level security;
 
+grant select, insert, update, delete on public.productos to anon;
+
 drop policy if exists "lectura publica" on productos;
 create policy "lectura publica" on productos
   for select using (true);
