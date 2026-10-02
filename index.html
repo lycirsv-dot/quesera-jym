@@ -219,7 +219,26 @@ footer{background:var(--ink);color:var(--cream);margin-top:0}
 /* toast */
 .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(90px);background:var(--ink);color:var(--cheese);font-weight:700;padding:14px 28px;border-radius:100px;z-index:200;transition:transform .35s cubic-bezier(.2,1.4,.4,1);font-size:14px;border:2px solid var(--cheese);max-width:90vw;text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0)}
-@media(max-width:640px){.fgrid{grid-template-columns:1fr}.hero-copy{padding-top:20px}.tabs .tab.hideS{display:none}}
+@media(max-width:640px){
+.fgrid{grid-template-columns:1fr}
+.hero-copy{padding-top:24px;padding-bottom:24px}
+.hero svg.scene{height:560px}
+h1.mega{font-size:8.5vw;line-height:1.02;margin:12px 0 8px}
+h1.mega .hl{padding:0 10px}
+.hero-sub{font-size:14.5px;max-width:100%;width:auto}
+img,svg{max-width:100%}
+.hero-cta{flex-direction:column}
+.hero-cta .btn{flex:1;text-align:center;padding:14px 18px;font-size:14.5px}
+.kicker{font-size:10px;letter-spacing:.1em}
+.brand{font-size:18px}
+.brand small{font-size:8px;letter-spacing:.2em}
+.statsband{gap:8px;padding:18px 10px}
+.statsband b{font-size:22px}
+.statsband div{flex:1 1 0;min-width:0}
+.statsband span{font-size:9.5px;letter-spacing:.08em}
+.band::after{display:none}
+.tabs .tab.hideS{display:none}
+}
 </style>
 </head>
 <body id="top">
